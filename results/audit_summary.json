@@ -1,0 +1,21 @@
+{
+  "raw_rows": 1445,
+  "clean_rows": 1360,
+  "dropped": 85,
+  "fixed": 175,
+  "findings": {
+    "priority_rule_recomputed": 60,
+    "legacy_priority_key_and_value": 70,
+    "legacy_date_to_iso": 30,
+    "invalid_json_label": 25,
+    "normalize_transaction_id": 20,
+    "rupees_stored_as_paise": 25,
+    "exact_duplicate_input": 60
+  },
+  "limitations": [
+    "No automatic category/language relabelling",
+    "No complete semantic date parser",
+    "Ambiguous amount discrepancies are dropped, not guessed",
+    "Regexes for repeated contact are not exhaustive; existing true labels retained"
+  ]
+}

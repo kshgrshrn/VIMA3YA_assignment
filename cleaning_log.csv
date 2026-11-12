@@ -1,0 +1,261 @@
+id,action,reason
+tr-00013,fix,priority_rule_recomputed
+tr-00018,fix,priority_rule_recomputed
+tr-00020,fix,legacy_priority_key_and_value; legacy_date_to_iso
+tr-00023,fix,priority_rule_recomputed
+tr-00045,fix,priority_rule_recomputed
+tr-00049,fix,legacy_priority_key_and_value
+tr-00058,fix,legacy_priority_key_and_value; legacy_date_to_iso
+tr-00059,fix,priority_rule_recomputed
+tr-00060,drop,invalid_json_label
+tr-00071,fix,normalize_transaction_id
+tr-00072,fix,legacy_priority_key_and_value
+tr-00073,fix,rupees_stored_as_paise
+tr-00077,fix,legacy_priority_key_and_value; legacy_date_to_iso
+tr-00095,drop,invalid_json_label
+tr-00114,fix,legacy_priority_key_and_value
+tr-00120,fix,legacy_priority_key_and_value
+tr-00123,fix,legacy_priority_key_and_value; legacy_date_to_iso
+tr-00125,drop,invalid_json_label
+tr-00129,fix,priority_rule_recomputed
+tr-00144,fix,rupees_stored_as_paise
+tr-00146,fix,priority_rule_recomputed
+tr-00147,fix,normalize_transaction_id
+tr-00151,fix,normalize_transaction_id
+tr-00153,fix,legacy_priority_key_and_value; legacy_date_to_iso
+tr-00154,fix,priority_rule_recomputed
+tr-00156,drop,exact_duplicate_input
+tr-00160,fix,legacy_priority_key_and_value; legacy_date_to_iso
+tr-00167,fix,rupees_stored_as_paise
+tr-00172,drop,invalid_json_label
+tr-00178,fix,legacy_priority_key_and_value
+tr-00184,fix,priority_rule_recomputed
+tr-00187,fix,rupees_stored_as_paise
+tr-00192,fix,legacy_priority_key_and_value
+tr-00199,fix,rupees_stored_as_paise
+tr-00208,drop,exact_duplicate_input
+tr-00211,drop,exact_duplicate_input
+tr-00212,fix,priority_rule_recomputed
+tr-00219,fix,legacy_priority_key_and_value
+tr-00220,fix,priority_rule_recomputed
+tr-00222,fix,rupees_stored_as_paise
+tr-00223,fix,legacy_priority_key_and_value
+tr-00225,fix,priority_rule_recomputed
+tr-00226,drop,exact_duplicate_input
+tr-00249,fix,legacy_priority_key_and_value; legacy_date_to_iso
+tr-00258,fix,legacy_priority_key_and_value
+tr-00263,fix,legacy_priority_key_and_value; legacy_date_to_iso
+tr-00264,fix,rupees_stored_as_paise
+tr-00267,drop,invalid_json_label
+tr-00294,fix,priority_rule_recomputed
+tr-00297,drop,exact_duplicate_input
+tr-00306,fix,priority_rule_recomputed
+tr-00309,fix,priority_rule_recomputed
+tr-00312,fix,priority_rule_recomputed
+tr-00320,fix,legacy_priority_key_and_value
+tr-00328,fix,rupees_stored_as_paise
+tr-00346,fix,legacy_priority_key_and_value
+tr-00347,fix,legacy_priority_key_and_value; legacy_date_to_iso
+tr-00349,drop,exact_duplicate_input
+tr-00355,fix,priority_rule_recomputed
+tr-00357,drop,invalid_json_label
+tr-00364,drop,exact_duplicate_input
+tr-00365,fix,legacy_priority_key_and_value
+tr-00370,fix,legacy_priority_key_and_value; legacy_date_to_iso
+tr-00373,drop,exact_duplicate_input
+tr-00380,fix,priority_rule_recomputed
+tr-00382,fix,rupees_stored_as_paise
+tr-00385,fix,legacy_priority_key_and_value
+tr-00391,fix,normalize_transaction_id
+tr-00407,fix,rupees_stored_as_paise
+tr-00413,fix,priority_rule_recomputed
+tr-00420,fix,normalize_transaction_id
+tr-00424,fix,priority_rule_recomputed
+tr-00427,fix,priority_rule_recomputed
+tr-00436,drop,exact_duplicate_input
+tr-00452,fix,priority_rule_recomputed
+tr-00454,drop,exact_duplicate_input
+tr-00457,fix,legacy_priority_key_and_value
+tr-00460,fix,normalize_transaction_id
+tr-00461,fix,legacy_priority_key_and_value
+tr-00470,fix,normalize_transaction_id
+tr-00472,fix,rupees_stored_as_paise
+tr-00475,fix,legacy_priority_key_and_value
+tr-00476,drop,exact_duplicate_input
+tr-00478,drop,invalid_json_label
+tr-00485,fix,priority_rule_recomputed
+tr-00497,drop,invalid_json_label
+tr-00502,drop,exact_duplicate_input
+tr-00503,fix,priority_rule_recomputed
+tr-00505,fix,priority_rule_recomputed
+tr-00508,fix,priority_rule_recomputed
+tr-00516,fix,legacy_priority_key_and_value
+tr-00523,fix,priority_rule_recomputed
+tr-00532,drop,exact_duplicate_input
+tr-00533,fix,priority_rule_recomputed
+tr-00534,drop,exact_duplicate_input
+tr-00546,drop,exact_duplicate_input
+tr-00556,fix,legacy_priority_key_and_value; legacy_date_to_iso
+tr-00558,drop,invalid_json_label
+tr-00560,fix,rupees_stored_as_paise
+tr-00567,fix,priority_rule_recomputed
+tr-00570,fix,normalize_transaction_id
+tr-00573,drop,exact_duplicate_input
+tr-00577,fix,legacy_priority_key_and_value; legacy_date_to_iso
+tr-00589,fix,legacy_priority_key_and_value
+tr-00595,fix,normalize_transaction_id
+tr-00602,fix,legacy_priority_key_and_value; legacy_date_to_iso
+tr-00605,drop,invalid_json_label
+tr-00606,fix,legacy_priority_key_and_value
+tr-00610,fix,legacy_priority_key_and_value
+tr-00622,fix,rupees_stored_as_paise
+tr-00628,fix,legacy_priority_key_and_value; legacy_date_to_iso
+tr-00638,fix,priority_rule_recomputed
+tr-00648,fix,priority_rule_recomputed
+tr-00649,fix,normalize_transaction_id
+tr-00653,fix,rupees_stored_as_paise
+tr-00656,fix,legacy_priority_key_and_value; legacy_date_to_iso
+tr-00665,drop,exact_duplicate_input
+tr-00670,fix,legacy_priority_key_and_value; legacy_date_to_iso
+tr-00674,drop,invalid_json_label
+tr-00677,fix,legacy_priority_key_and_value; legacy_date_to_iso
+tr-00685,fix,legacy_priority_key_and_value
+tr-00688,fix,rupees_stored_as_paise
+tr-00689,fix,priority_rule_recomputed
+tr-00691,fix,rupees_stored_as_paise
+tr-00701,drop,exact_duplicate_input
+tr-00704,fix,legacy_priority_key_and_value; legacy_date_to_iso
+tr-00706,fix,priority_rule_recomputed
+tr-00707,fix,priority_rule_recomputed
+tr-00716,drop,exact_duplicate_input
+tr-00717,fix,priority_rule_recomputed
+tr-00727,fix,rupees_stored_as_paise
+tr-00735,drop,invalid_json_label
+tr-00744,fix,legacy_priority_key_and_value
+tr-00745,fix,priority_rule_recomputed
+tr-00746,fix,priority_rule_recomputed
+tr-00757,fix,priority_rule_recomputed
+tr-00761,drop,exact_duplicate_input
+tr-00765,drop,invalid_json_label
+tr-00771,fix,normalize_transaction_id
+tr-00773,drop,exact_duplicate_input
+tr-00778,fix,legacy_priority_key_and_value
+tr-00782,fix,priority_rule_recomputed
+tr-00783,drop,exact_duplicate_input
+tr-00791,fix,legacy_priority_key_and_value; legacy_date_to_iso
+tr-00795,fix,rupees_stored_as_paise
+tr-00800,drop,exact_duplicate_input
+tr-00802,fix,priority_rule_recomputed
+tr-00809,drop,invalid_json_label
+tr-00811,drop,exact_duplicate_input
+tr-00820,fix,legacy_priority_key_and_value; legacy_date_to_iso
+tr-00824,drop,invalid_json_label
+tr-00838,fix,normalize_transaction_id
+tr-00839,fix,legacy_priority_key_and_value; legacy_date_to_iso
+tr-00843,drop,exact_duplicate_input
+tr-00845,fix,rupees_stored_as_paise
+tr-00846,drop,invalid_json_label
+tr-00852,fix,priority_rule_recomputed
+tr-00879,fix,priority_rule_recomputed
+tr-00880,drop,exact_duplicate_input
+tr-00888,fix,normalize_transaction_id
+tr-00890,fix,priority_rule_recomputed
+tr-00899,fix,normalize_transaction_id
+tr-00908,fix,normalize_transaction_id
+tr-00913,drop,exact_duplicate_input
+tr-00920,fix,rupees_stored_as_paise
+tr-00922,fix,legacy_priority_key_and_value
+tr-00932,fix,priority_rule_recomputed
+tr-00933,fix,priority_rule_recomputed
+tr-00936,drop,exact_duplicate_input
+tr-00958,drop,invalid_json_label
+tr-00960,drop,invalid_json_label
+tr-00967,fix,priority_rule_recomputed
+tr-00968,drop,exact_duplicate_input
+tr-00975,drop,invalid_json_label
+tr-00977,drop,exact_duplicate_input
+tr-00978,drop,invalid_json_label
+tr-00979,drop,invalid_json_label
+tr-00980,drop,invalid_json_label
+tr-00985,fix,legacy_priority_key_and_value; legacy_date_to_iso
+tr-00986,fix,rupees_stored_as_paise
+tr-00987,fix,legacy_priority_key_and_value
+tr-01000,drop,exact_duplicate_input
+tr-01006,fix,legacy_priority_key_and_value
+tr-01011,drop,exact_duplicate_input
+tr-01012,fix,normalize_transaction_id
+tr-01017,fix,priority_rule_recomputed
+tr-01019,fix,priority_rule_recomputed
+tr-01023,fix,priority_rule_recomputed
+tr-01028,fix,legacy_priority_key_and_value
+tr-01030,drop,exact_duplicate_input
+tr-01044,drop,exact_duplicate_input
+tr-01046,fix,legacy_priority_key_and_value; legacy_date_to_iso
+tr-01048,fix,priority_rule_recomputed
+tr-01067,drop,exact_duplicate_input
+tr-01070,drop,invalid_json_label
+tr-01083,fix,legacy_priority_key_and_value
+tr-01085,drop,exact_duplicate_input
+tr-01086,fix,priority_rule_recomputed
+tr-01087,drop,invalid_json_label
+tr-01089,fix,legacy_priority_key_and_value
+tr-01093,drop,exact_duplicate_input
+tr-01095,fix,rupees_stored_as_paise
+tr-01104,drop,exact_duplicate_input
+tr-01108,drop,exact_duplicate_input
+tr-01109,fix,priority_rule_recomputed
+tr-01115,fix,legacy_priority_key_and_value
+tr-01131,fix,priority_rule_recomputed
+tr-01133,fix,legacy_priority_key_and_value; legacy_date_to_iso
+tr-01134,drop,exact_duplicate_input
+tr-01135,drop,exact_duplicate_input
+tr-01136,fix,normalize_transaction_id
+tr-01139,drop,exact_duplicate_input
+tr-01141,drop,exact_duplicate_input
+tr-01143,fix,legacy_priority_key_and_value; legacy_date_to_iso
+tr-01146,fix,priority_rule_recomputed
+tr-01151,fix,legacy_priority_key_and_value
+tr-01158,fix,legacy_priority_key_and_value; legacy_date_to_iso
+tr-01176,drop,exact_duplicate_input
+tr-01178,fix,legacy_priority_key_and_value; legacy_date_to_iso
+tr-01183,drop,exact_duplicate_input
+tr-01188,fix,normalize_transaction_id
+tr-01199,drop,invalid_json_label
+tr-01202,fix,legacy_priority_key_and_value
+tr-01204,drop,exact_duplicate_input
+tr-01222,fix,priority_rule_recomputed
+tr-01238,fix,normalize_transaction_id
+tr-01239,drop,exact_duplicate_input
+tr-01246,drop,exact_duplicate_input
+tr-01248,drop,exact_duplicate_input
+tr-01250,drop,exact_duplicate_input
+tr-01260,drop,exact_duplicate_input
+tr-01274,fix,legacy_priority_key_and_value; legacy_date_to_iso
+tr-01275,drop,exact_duplicate_input
+tr-01286,fix,legacy_priority_key_and_value
+tr-01301,fix,legacy_priority_key_and_value
+tr-01305,fix,priority_rule_recomputed
+tr-01311,fix,rupees_stored_as_paise
+tr-01319,fix,priority_rule_recomputed
+tr-01326,fix,legacy_priority_key_and_value
+tr-01331,fix,legacy_priority_key_and_value
+tr-01343,fix,legacy_priority_key_and_value; legacy_date_to_iso
+tr-01355,fix,rupees_stored_as_paise
+tr-01359,fix,legacy_priority_key_and_value
+tr-01363,fix,normalize_transaction_id
+tr-01366,fix,legacy_priority_key_and_value; legacy_date_to_iso
+tr-01370,fix,priority_rule_recomputed
+tr-01375,fix,rupees_stored_as_paise
+tr-01381,drop,exact_duplicate_input
+tr-01386,fix,legacy_priority_key_and_value
+tr-01393,drop,exact_duplicate_input
+tr-01398,drop,exact_duplicate_input
+tr-01403,fix,priority_rule_recomputed
+tr-01407,fix,priority_rule_recomputed
+tr-01409,drop,exact_duplicate_input
+tr-01413,fix,legacy_priority_key_and_value
+tr-01419,drop,exact_duplicate_input
+tr-01427,drop,exact_duplicate_input
+tr-01433,drop,exact_duplicate_input
+tr-01441,fix,legacy_priority_key_and_value
+tr-01443,drop,exact_duplicate_input

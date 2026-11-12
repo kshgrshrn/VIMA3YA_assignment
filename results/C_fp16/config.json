@@ -1,0 +1,14 @@
+{
+  "seed": 42,
+  "steps": 100,
+  "effective_batch": 16,
+  "micro_batch": 2,
+  "learning_rate": 0.0002,
+  "rank": 16,
+  "quantized": false,
+  "boundary_sampling": false,
+  "name": "C_fp16",
+  "data": "clean",
+  "base_model": "Qwen/Qwen2.5-0.5B-Instruct",
+  "revision": "7ae557604adf67be50417f59c2c2f167def9a775"
+}

@@ -1,0 +1,6 @@
+private_data/
+__pycache__/
+.ipynb_checkpoints/
+training_assessment.zip
+results/*/adapter/
+*.log

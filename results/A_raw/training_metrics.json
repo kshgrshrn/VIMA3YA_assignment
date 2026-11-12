@@ -1,0 +1,9 @@
+{
+  "training_minutes": 8.071238760683336,
+  "peak_allocated_gb": 4.950356960296631,
+  "peak_reserved_gb": 13.5,
+  "trainable_parameters": 8798208,
+  "examples_sampled": 1600,
+  "successful_optimizer_steps": 100,
+  "max_training_tokens": 2215
+}

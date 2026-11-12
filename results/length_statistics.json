@@ -1,0 +1,8 @@
+{
+  "min": 97,
+  "median": 168,
+  "p95": 225,
+  "p99": 1816,
+  "max": 2215,
+  "policy": "No truncation; dynamic padding; microbatch 1 above 768 tokens."
+}
