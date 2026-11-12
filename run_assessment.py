@@ -1,4 +1,4 @@
-"""Run locally prepared code on a free Colab T4. Never sends tickets to an AI API."""
+"""Run the assessment pipeline on a free Colab T4 using local inference."""
 import argparse
 import csv
 import hashlib
@@ -145,89 +145,85 @@ def final_predictions(config,tokenizer,dev):
     del model;release_memory()
 
 
-def tables_and_report(config):
-    rows=[]
-    for name in ['baseline_fixed','baseline_rules']+[c['name'] for c in RUNS]:
-        folder=RESULTS/name
-        if not (folder/'scores.json').exists():continue
-        scores=json.loads((folder/'scores.json').read_text())['all']
-        metrics=json.loads((folder/'training_metrics.json').read_text()) if (folder/'training_metrics.json').exists() else {}
-        rows.append(dict(run=name,exact_match=scores['exact_match'],mean_field_accuracy=scores['mean_field_acc'],json_valid=scores['json_valid'],
-                         peak_gpu_gb=metrics.get('peak_allocated_gb'),training_minutes=metrics.get('training_minutes')))
-    with (RESULTS/'experiment_table.csv').open('w',newline='') as handle:
-        writer=csv.DictWriter(handle,fieldnames=list(rows[0]));writer.writeheader();writer.writerows(rows)
-    dev=load_rows(DATA/'data/dev.jsonl');preds={p['id']:p['output'] for p in load_rows(RESULTS/config['name']/'dev_predictions.jsonl')}
-    errors=[];sc=scorer()
-    for row in dev:
-        gold=json.loads(row['messages'][-1]['content']);pred=sc.parse(preds[row['id']])
-        wrong=[key for key in sc.KEYS if pred is None or key not in pred or not sc.same(pred[key],gold[key])]
-        if not wrong and set(pred)==set(sc.KEYS):continue
-        explanation=[]
-        if pred is None:explanation.append('Invalid JSON: generation did not satisfy the output contract.')
-        if 'amount_paise' in wrong:explanation.append('Amount extraction/unit conversion failed; inspect distractors and decimal/k/lakh format.')
-        if 'txn_date' in wrong:explanation.append('Date extraction or resolution failed; inspect relative/yearless/quoted dates.')
-        if any(k in wrong for k in ['priority','needs_human']):explanation.append('Business-rule output failed; check upstream category/amount and escalation cues.')
-        if 'category' in wrong:explanation.append('Intent classification failed; inspect overlapping intent and fraud precedence.')
-        if 'txn_id' in wrong:explanation.append('Transaction-ID copying/normalization failed.')
-        if 'channel' in wrong:explanation.append('Explicit-channel extraction/null decision failed.')
-        if 'language' in wrong:explanation.append('English/Hinglish distinction failed.')
-        if pred is not None and set(pred)!=set(sc.KEYS):explanation.append('Output key set differs from the required eight keys.')
-        errors.append({'id':row['id'],'fields':wrong,'expected':gold,'actual':preds[row['id']],
-                       'diagnostic_hypothesis':' '.join(explanation)})
-    save_json(RESULTS/'dev_errors.json',errors)
-    summary=json.loads((RESULTS/'audit_summary.json').read_text())
-    scores=json.loads((RESULTS/config['name']/'scores.json').read_text())
-    table='| Run | Exact match | Mean field | Peak GB | Train min |\n|---|---:|---:|---:|---:|\n'
-    for row in rows:
-        memory='—' if row['peak_gpu_gb'] is None else f"{row['peak_gpu_gb']:.2f}"
-        minutes='—' if row['training_minutes'] is None else f"{row['training_minutes']:.2f}"
-        table+=f"| {row['run']} | {row['exact_match']:.1%} | {row['mean_field_accuracy']:.1%} | {memory} | {minutes} |\n"
-    failures='| ID | Failed fields | Expected → actual (first failed field) |\n|---|---|---|\n'
-    for error in errors[:10]:
-        key=error['fields'][0] if error['fields'] else 'keys';parsed=sc.parse(error['actual'])
-        actual=parsed.get(key) if parsed else 'invalid JSON'
-        failures+=f"| {error['id']} | {', '.join(error['fields']) or 'extra keys'} | {key}: {error['expected'].get(key)!r} → {actual!r} |\n"
-    weak=sorted(scores['all']['fields'].items(),key=lambda x:x[1])[:3]
-    report=f'''# Small-model ticket triage — assessment report
+def save_evaluation_artifacts(config):
+    """Save scores and error examples without rewriting the submission documents."""
+    rows = []
+    run_names = ['baseline_fixed', 'baseline_rules'] + [run['name'] for run in RUNS]
 
-## Data audit and method
-Training-only audit: {summary['raw_rows']} raw rows, {summary['clean_rows']} retained, {summary['dropped']} dropped, {summary['fixed']} fixed. Finding counts overlap: {json.dumps(summary['findings'])}. The row-level log records every changed/dropped row. JSON/schema checks, duplicate grouping, decimal currency parsing excluding balances/limits/fees and quoted text, and deterministic priority rules produce these findings. Decimal rupees stored as truncated whole rupees are recovered from an unambiguous explicit amount. No LLM generated labels. Category/language labels and semantic dates beyond format conversion are not exhaustively relabelled; that remains an audit limitation.
+    for name in run_names:
+        folder = RESULTS / name
+        score_path = folder / 'scores.json'
+        if not score_path.exists():
+            continue
 
-## Training and controlled comparisons
-Base: {MODEL_ID}; revision recorded in final_config.json. Transformers/PEFT with an explicit PyTorch loop keeps masking and exposure visible. The original system/user messages use the native chat template. Loss includes only assistant tokens, including end-of-message, with prompt/pad tokens masked. Full examples are retained without truncation; measured lengths are in length_statistics.json. LoRA targets attention and MLP projections. Seed 42, dropout 0.05, AdamW, 2e-4 peak LR with warmup/cosine schedule; {BASE['steps']} updates × {BASE['effective_batch']} sampled rows, identical exposure budget across runs. Mixed precision is FP16; QLoRA uses NF4/double quantization with FP16 computation. Alpha/rank is fixed at 2. E samples existing rows within 10% of ₹5,000/₹50,000 boundaries at 3× weight, with the same total sample count. All comparisons have one declared intervention; single-seed results do not establish statistical significance.
+        scores = json.loads(score_path.read_text())['all']
+        metrics_path = folder / 'training_metrics.json'
+        metrics = json.loads(metrics_path.read_text()) if metrics_path.exists() else {}
+        rows.append({
+            'run': name,
+            'exact_match': scores['exact_match'],
+            'mean_field_accuracy': scores['mean_field_acc'],
+            'json_valid': scores['json_valid'],
+            'peak_gpu_gb': metrics.get('peak_allocated_gb'),
+            'training_minutes': metrics.get('training_minutes'),
+        })
 
-{table}
-A/B isolates cleaning, B/C precision, B/D rank, B/E sampling. Baselines load the untuned instruction checkpoint in FP16; rules are added only in the reference baseline. Peak GB is allocated CUDA memory during training, not total device usage; reserved memory and actual optimizer updates are also logged. Chosen run: **{config['name']}**, using dev exact match, then mean field accuracy, then lower rank. Test never influences selection.
+    if rows:
+        with (RESULTS / 'experiment_table.csv').open('w', newline='') as handle:
+            writer = csv.DictWriter(handle, fieldnames=list(rows[0]))
+            writer.writeheader()
+            writer.writerows(rows)
 
-## Error analysis
-Weakest fields: {', '.join(f'{k} {v:.1%}' for k,v in weak)}. {len(errors)} dev rows fail exact match. Full per-field/category/slice scores and per-row diagnostic hypotheses are in results/. The table shows actual failures, not invented examples.
+    dev_rows = load_rows(DATA / 'data/dev.jsonl')
+    predictions = {
+        row['id']: row['output']
+        for row in load_rows(RESULTS / config['name'] / 'dev_predictions.jsonl')
+    }
+    evaluator = scorer()
+    errors = []
+    for row in dev_rows:
+        expected = json.loads(row['messages'][-1]['content'])
+        actual_text = predictions[row['id']]
+        actual = evaluator.parse(actual_text)
+        wrong = [
+            key for key in evaluator.KEYS
+            if actual is None or key not in actual or not evaluator.same(actual[key], expected[key])
+        ]
+        if not wrong and set(actual) == set(evaluator.KEYS):
+            continue
 
-{failures}
-Amount/date errors suggest checking copying, normalization and relative-date reasoning; priority/escalation errors may propagate from those upstream errors. These are hypotheses, not causal proof. The detailed error file gives an explanation for each listed case. With one more week: inspect ambiguous training semantics, add deterministic schema-derived training augmentation, repeat key contrasts with additional seeds, and test a larger model within the same hardware constraints. Avoid repeatedly tuning on the same small dev set without reporting that limitation.
+        reasons = []
+        if actual is None:
+            reasons.append('Invalid JSON: generation did not satisfy the output contract.')
+        if 'amount_paise' in wrong:
+            reasons.append('Amount extraction or unit conversion failed.')
+        if 'txn_date' in wrong:
+            reasons.append('Date extraction or resolution failed; inspect relative or quoted dates.')
+        if any(key in wrong for key in ['priority', 'needs_human']):
+            reasons.append('Priority or escalation rule was missed; check the amount and ticket cues.')
+        if 'category' in wrong:
+            reasons.append('Intent classification failed; inspect overlapping intent and fraud precedence.')
+        if 'txn_id' in wrong:
+            reasons.append('Transaction-ID copying or normalization failed.')
+        if 'channel' in wrong:
+            reasons.append('Channel extraction or null decision failed.')
+        if 'language' in wrong:
+            reasons.append('English/Hinglish classification failed.')
+        if actual is not None and set(actual) != set(evaluator.KEYS):
+            reasons.append('Output key set differs from the required eight keys.')
 
-## Reproduction, limitations and AI disclosure
-Inference uses untouched system/user inputs, greedy model.generate, max_new_tokens=200, native chat formatting and whitespace stripping only. No grammar constraints, output repair or teacher-model labels. Reload matching, environment, timing and configuration are saved. Notebook reproduction must be checked on a fresh T4 before claiming the three-hour condition is met. No production deployment or business savings are claimed.
+        errors.append({
+            'id': row['id'],
+            'fields': wrong,
+            'expected': expected,
+            'actual': actual_text,
+            'diagnostic_hypothesis': ' '.join(reasons),
+        })
 
-OpenAI Codex assisted with code drafting, deterministic audit checks, experiment design, debugging, research and report drafting. Numbers come from executed code and the supplied scorer. The candidate must review and understand the implementation before submission and live defense.
-'''
-    (ROOT/'report.md').write_text(report)
-    (ROOT/'README.md').write_text(f'''# NimbusPay small-model triage
-
-Base model: `{MODEL_ID}`. Best run: `{config['name']}`. Loaded in 4-bit: **{config['quantized']}**.
-
-Measured dev exact match: **{scores['all']['exact_match']:.1%}**; mean field accuracy: **{scores['all']['mean_field_acc']:.1%}**.
-
-An independent hiring-assessment project, not production work or employment. See report.md for AI-assistance disclosure and limitations.
-
-## Reproduce
-Open notebook.ipynb in a fresh free Colab T4. Upload the employer's original training_assessment.zip when prompted. The notebook embeds the code, uses the saved final configuration, retrains the selected adapter and produces test predictions. No supplied training dataset or base model is included here. Full experiment code is retained; enable experiment mode only to rerun the entire matrix.
-
-The exact model revision, adapter configuration, generation settings, library versions, loss logs, audit and scorer outputs are retained. The provided scorer is unchanged. Adapters use standard PEFT safetensors. Keep this repository private until the agreed deadline; make no commits after the deadline.
-
-## Attribution
-Some supplied ticket text is adapted from PolyAI Banking77 (CC-BY-4.0), per the assignment brief: https://github.com/PolyAI-LDN/task-specific-datasets . Task, categories and labels are supplied by VIMA3YA. No rights to redistribute the full supplied dataset are asserted. Model license: Apache-2.0, see its upstream model card.
-''')
-
+    save_json(RESULTS / 'dev_errors.json', errors)
+    score_path = RESULTS / config['name'] / 'scores.json'
+    final_scores = json.loads(score_path.read_text())['all']
+    save_json(RESULTS / 'dev_field_scores.json', final_scores['fields'])
 
 def bundle():
     path=ROOT.parent/'nimbuspay_results.zip'
@@ -259,7 +255,7 @@ def main(mode,archive):
         baseline(tokenizer,revision,dev,True);bundle()
         for config in RUNS:
             experiment(config,raw,clean,dev,tokenizer,revision);bundle()
-        best=select_best();tables_and_report(best);bundle()
+        best=select_best();save_evaluation_artifacts(best);bundle()
         # Test generation is deferred to the fresh selected-model reproduction.
     else:
         best=json.loads((ROOT/'final_config.json').read_text())
@@ -274,7 +270,7 @@ def main(mode,archive):
         final_predictions(best,tokenizer,dev)
         elapsed=time.monotonic()-started
         save_json(RESULTS/'reproduction_timing.json',{'runner_seconds':elapsed,'within_3_hours_excluding_notebook_setup':elapsed<10800})
-        tables_and_report(best);bundle()
+        save_evaluation_artifacts(best);bundle()
         if elapsed>=10800:raise RuntimeError('Reproduction exceeded three hours; report and shorten the recipe.')
     print('DONE',mode,round((time.monotonic()-started)/60,2),'minutes',flush=True)
 
